@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import WaveDivider from '../components/ui/WaveDivider';
 
 const Pricing = () => {
+    const [isAnnual, setIsAnnual] = useState(false);
+
     const plans = [
         {
             name: "Manutenção",
-            price: "199",
+            price: isAnnual ? "169" : "199",
+            period: isAnnual ? "/mês (anual)" : "/mês",
             features: [
                 "Hospedagem inclusa",
                 "Backup diário",
@@ -17,7 +21,8 @@ const Pricing = () => {
         },
         {
             name: "Visual Update",
-            price: "499",
+            price: isAnnual ? "419" : "499",
+            period: isAnnual ? "/mês (anual)" : "/mês",
             features: [
                 "Tudo do plano Manutenção",
                 "Redesign anual",
@@ -29,7 +34,8 @@ const Pricing = () => {
         },
         {
             name: "Crescimento",
-            price: "999",
+            price: isAnnual ? "849" : "999",
+            period: isAnnual ? "/mês (anual)" : "/mês",
             features: [
                 "Tudo do plano Update",
                 "Gestão de conteúdo (Blog)",
@@ -57,17 +63,37 @@ const Pricing = () => {
     };
 
     return (
-        <section id="plans" className="py-24 bg-white relative">
+        <section id="plans" className="py-24 bg-white dark:bg-[#020617] relative overflow-hidden transition-colors duration-300">
             {/* Background Decoration */}
-            <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-gray-50 to-transparent pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-gray-50 to-transparent dark:from-white/5 pointer-events-none"></div>
 
             <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center max-w-3xl mx-auto mb-20">
+                <div className="text-center max-w-3xl mx-auto mb-16">
                     <span className="text-secondary font-bold tracking-widest uppercase text-sm mb-4 block">Planos</span>
-                    <h2 className="text-4xl md:text-5xl font-display font-bold text-darkblue mb-6">Evolua com Assinatura</h2>
-                    <p className="text-lg text-gray-600">
-                        Previsibilidade e qualidade contínua para o seu negócio. Escolha o plano ideal para suas necessidades.
+                    <h2 className="text-4xl md:text-5xl font-display font-bold text-darkblue dark:text-white mb-6">
+                        Evolua com <span className="text-gradient-yellow">Assinatura</span>
+                    </h2>
+                    <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                        Previsibilidade e qualidade contínua para o seu negócio.
                     </p>
+
+                    {/* Toggle Switch */}
+                    <div className="flex items-center justify-center gap-4">
+                        <span className={`text-sm font-semibold ${!isAnnual ? 'text-darkblue dark:text-white' : 'text-gray-400'}`}>Mensal</span>
+                        <button
+                            onClick={() => setIsAnnual(!isAnnual)}
+                            className="w-14 h-8 bg-gray-200 dark:bg-white/10 rounded-full p-1 relative transition-colors duration-300 focus:outline-none"
+                        >
+                            <motion.div
+                                className="w-6 h-6 bg-primary rounded-full shadow-md"
+                                animate={{ x: isAnnual ? 24 : 0 }}
+                                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                            />
+                        </button>
+                        <span className={`text-sm font-semibold ${isAnnual ? 'text-darkblue dark:text-white' : 'text-gray-400'}`}>
+                            Anual <span className="text-yellow-500 text-xs ml-1 font-bold">-15% OFF</span>
+                        </span>
+                    </div>
                 </div>
 
                 <motion.div
@@ -83,7 +109,7 @@ const Pricing = () => {
                             variants={cardVariants}
                             className={`p-8 rounded-2xl transition-all duration-300 relative ${plan.isPopular
                                 ? 'bg-darkblue text-white shadow-2xl scale-105 border border-white/10 z-10'
-                                : 'bg-white text-darkblue border border-gray-200 hover:shadow-xl hover:-translate-y-1'
+                                : 'bg-white dark:bg-[#1a1c20] text-darkblue dark:text-white border border-gray-200 dark:border-white/5 hover:shadow-xl hover:-translate-y-1'
                                 }`}
                         >
                             {plan.isPopular && (
@@ -92,20 +118,20 @@ const Pricing = () => {
                                 </div>
                             )}
 
-                            <h3 className={`text-2xl font-bold mb-4 ${plan.isPopular ? 'text-white' : 'text-darkblue'}`}>{plan.name}</h3>
+                            <h3 className={`text-2xl font-bold mb-4 ${plan.isPopular ? 'text-white' : 'text-darkblue dark:text-white'}`}>{plan.name}</h3>
                             <div className="flex items-baseline mb-8">
-                                <span className={`text-sm ${plan.isPopular ? 'text-gray-300' : 'text-gray-500'}`}>R$</span>
-                                <span className={`text-5xl font-bold mx-1 ${plan.isPopular ? 'text-white' : 'text-darkblue'}`}>{plan.price}</span>
-                                <span className={`text-sm ${plan.isPopular ? 'text-gray-300' : 'text-gray-500'}`}>/mês</span>
+                                <span className={`text-sm ${plan.isPopular ? 'text-gray-300' : 'text-gray-500 dark:text-gray-400'}`}>R$</span>
+                                <span className={`text-5xl font-bold mx-1 ${plan.isPopular ? 'text-white' : 'text-darkblue dark:text-white'}`}>{plan.price}</span>
+                                <span className={`text-sm ${plan.isPopular ? 'text-gray-300' : 'text-gray-500 dark:text-gray-400'}`}>{plan.period}</span>
                             </div>
 
                             <ul className="space-y-4 mb-8">
                                 {plan.features.map((feature, idx) => (
                                     <li key={idx} className="flex items-start gap-3">
-                                        <svg className={`w-5 h-5 mt-0.5 flex-shrink-0 ${plan.isPopular ? 'text-primary' : 'text-green-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <svg className={`w-5 h-5 mt-0.5 flex-shrink-0 ${plan.isPopular ? 'text-primary' : 'text-yellow-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                         </svg>
-                                        <span className={`text-sm ${plan.isPopular ? 'text-gray-300' : 'text-gray-600'}`}>{feature}</span>
+                                        <span className={`text-sm ${plan.isPopular ? 'text-gray-300' : 'text-gray-600 dark:text-gray-400'}`}>{feature}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -117,6 +143,8 @@ const Pricing = () => {
                     ))}
                 </motion.div>
             </div>
+
+            <WaveDivider lightFill="#f9fafb" darkFill="#020617" type="slant-left" />
         </section>
     );
 };

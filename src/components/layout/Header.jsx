@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logoPeacock from '../assets/logo-locytech-dark.png';
+import { Sun, Moon } from 'lucide-react';
+import logoPeacock from '../../assets/logo-locytech-dark.png';
+import { useTheme } from '../../hooks/useTheme';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const { theme, toggleTheme } = useTheme();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -46,20 +49,18 @@ const Header = () => {
     };
 
     return (
-        <motion.header
-            className="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-6 md:py-6 transition-all duration-300"
-            initial="hidden"
-            animate="visible"
-            variants={headerVariants}
-        >
-            <div className={`max-w-7xl mx-auto rounded-xl transition-all duration-300 ${isScrolled ? 'bg-[#04293F]/60 backdrop-blur-xl border border-white/10 shadow-2xl py-3 px-6' : 'bg-transparent py-2 px-0'}`}>
+        <header className="absolute top-0 left-0 right-0 z-50 px-4 py-4 md:px-6 md:py-6">
+            <div className="max-w-7xl mx-auto py-2 px-0 bg-transparent">
                 <div className="flex justify-between items-center">
-                    <a href="#hero" className="z-50 group flex items-center gap-3">
-                        <img src={logoPeacock} alt="LocyTech Logo" className="h-20 w-auto object-contain drop-shadow-md" />
-                        <span className="text-2xl font-display font-bold text-white tracking-tight">
-                            Locy<span className="text-primary group-hover:text-white transition-colors">Tech</span>
+                    <div className="z-50 group flex items-center gap-3">
+                        <a href="#hero">
+                            <img src={logoPeacock} alt="LocyTech Logo" className="h-20 w-auto object-contain drop-shadow-md" />
+                        </a>
+                        <span className="text-2xl font-display font-bold text-gray-900 dark:text-white tracking-tight">
+                            <a href="#about" className="text-[#FACC15] hover:text-gray-800 dark:hover:text-white transition-colors">Locy</a>
+                            <a href="#services" className="text-primary hover:text-gray-800 dark:hover:text-white transition-colors">Tech</a>
                         </span>
-                    </a>
+                    </div>
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex items-center gap-8">
@@ -73,13 +74,23 @@ const Header = () => {
                                 <a
                                     key={index}
                                     href={href}
-                                    className="text-sm font-medium text-gray-300 hover:text-white transition-colors relative group font-sans"
+                                    className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors relative group font-sans"
                                 >
                                     {item}
                                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
                                 </a>
                             );
                         })}
+
+                        {/* Theme Toggle Desktop */}
+                        <button
+                            onClick={toggleTheme}
+                            className="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors text-yellow-400 hover:text-yellow-300 border border-white/5"
+                            aria-label="Alternar tema"
+                        >
+                            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} className="text-blue-300" />}
+                        </button>
+
                         <a
                             href="#contact"
                             className="bg-primary/10 hover:bg-primary/20 border border-primary/50 text-primary text-sm font-bold py-2.5 px-6 rounded-lg transition-all hover:shadow-[0_0_20px_rgba(13,185,242,0.3)]"
@@ -88,18 +99,30 @@ const Header = () => {
                         </a>
                     </nav>
 
-                    {/* Mobile Menu Toggle */}
-                    <button
-                        className="md:hidden z-50 p-2 text-white focus:outline-none"
-                        onClick={toggleMenu}
-                        aria-label="Toggle menu"
-                    >
-                        <div className="w-6 h-5 relative flex flex-col justify-between">
-                            <span className={`w-full h-0.5 bg-white rounded-full transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
-                            <span className={`w-full h-0.5 bg-white rounded-full transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`}></span>
-                            <span className={`w-full h-0.5 bg-white rounded-full transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2.5' : ''}`}></span>
-                        </div>
-                    </button>
+                    {/* Mobile Controls */}
+                    <div className="md:hidden flex items-center gap-4">
+                        {/* Theme Toggle Mobile */}
+                        <button
+                            onClick={toggleTheme}
+                            className="z-50 bg-black/20 p-2 rounded-full text-yellow-400 border border-white/10 backdrop-blur-md"
+                            aria-label="Alternar tema"
+                        >
+                            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} className="text-blue-300" />}
+                        </button>
+
+                        {/* Mobile Menu Toggle */}
+                        <button
+                            className="z-50 p-2 text-gray-900 dark:text-white focus:outline-none"
+                            onClick={toggleMenu}
+                            aria-label="Toggle menu"
+                        >
+                            <div className="w-6 h-5 relative flex flex-col justify-between">
+                                <span className={`w-full h-0.5 bg-gray-900 dark:bg-white rounded-full transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+                                <span className={`w-full h-0.5 bg-gray-900 dark:bg-white rounded-full transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`}></span>
+                                <span className={`w-full h-0.5 bg-gray-900 dark:bg-white rounded-full transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2.5' : ''}`}></span>
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -144,7 +167,7 @@ const Header = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </motion.header>
+        </header>
     );
 };
 
